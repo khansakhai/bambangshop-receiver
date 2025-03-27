@@ -59,14 +59,14 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   Open another new terminal, edit `ROCKET_PORT` in `.env` to `8003`, then execute `cargo run`.
 
 ## Mandatory Checklists (Subscriber)
--   [ ] Clone https://gitlab.com/ichlaffterlalu/bambangshop-receiver to a new repository.
+-   [X] Clone https://gitlab.com/ichlaffterlalu/bambangshop-receiver to a new repository.
 -   **STAGE 1: Implement models and repositories**
-    -   [ ] Commit: `Create Notification model struct.`
-    -   [ ] Commit: `Create SubscriberRequest model struct.`
-    -   [ ] Commit: `Create Notification database and Notification repository struct skeleton.`
-    -   [ ] Commit: `Implement add function in Notification repository.`
-    -   [ ] Commit: `Implement list_all_as_string function in Notification repository.`
-    -   [ ] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
+    -   [X] Commit: `Create Notification model struct.`
+    -   [X] Commit: `Create SubscriberRequest model struct.`
+    -   [X] Commit: `Create Notification database and Notification repository struct skeleton.`
+    -   [X] Commit: `Implement add function in Notification repository.`
+    -   [X] Commit: `Implement list_all_as_string function in Notification repository.`
+    -   [X] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
 -   **STAGE 3: Implement services and controllers**
     -   [ ] Commit: `Create Notification service struct skeleton.`
     -   [ ] Commit: `Implement subscribe function in Notification service.`
@@ -85,5 +85,13 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
+
+>In this tutorial, we used RwLock<> to synchronise the use of Vec of Notifications. Explain why it is necessary for this case, and explain why we do not use Mutex<> instead?
+
+Dalam tutorial ini, saya menggunakan `RwLock<>` untuk menyinkronkan akses ke `Vec<Notification>` karena saya ingin memungkinkan banyak thread membaca data secara bersamaan, tetapi hanya satu thread yang boleh menulis saat ada perubahan. Ini lebih efisien untuk kasus di mana aktivitas baca lebih sering daripada tulis. Saya tidak menggunakan `Mutex<>` karena `Mutex` hanya mengizinkan satu thread untuk mengakses data, baik itu untuk membaca maupun menulis, yang menurut saya bisa memperlambat proses jika ada banyak pembacaan data.
+
+>In this tutorial, we used lazy_static external library to define Vec and DashMap as a “static” variable. Compared to Java where we can mutate the content of a static variable via a static function, why did not Rust allow us to do so?
+
+Saya menggunakan *library* eksternal `lazy_static` untuk membuat `Vec` atau `DashMap` sebagai variabel *static* karena di Rust, variabel *static* harus memenuhi aturan *ownership* dan *thread-safety* yang sangat ketat. Berbeda dengan Java, Rust tidak mengizinkan kita mengubah isi variabel *static* langsung tanpa pengaman karena ingin memastikan tidak terjadi *race condition*. Menurut saya, ini adalah cara Rust untuk menjaga agar program aman dijalankan secara paralel, dan itulah kenapa saya perlu membungkusnya dengan struktur seperti `RwLock<>` agar tetap bisa dimutasi dengan aman.
 
 #### Reflection Subscriber-2
